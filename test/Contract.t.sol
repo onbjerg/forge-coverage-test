@@ -67,3 +67,15 @@ contract LoopTest is DSTest {
         fixture.oddEven();
     }
 }
+
+contract PartiallyCoveredTest is DSTest {
+    PartiallyCovered fixture;
+
+    function setUp() external {
+        fixture = new PartiallyCovered();
+    }
+
+    function testPartiallyCovered() external {
+        fixture.allBranches(true);
+    }
+}

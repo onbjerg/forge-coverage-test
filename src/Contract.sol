@@ -101,3 +101,48 @@ contract Uncovered {
         }
     }
 }
+
+contract PartiallyCovered {
+    event Branch(uint256 n);
+
+    function allBranches(bool a) external {
+        // Should be partially covered
+        require(a);
+        // Should be partially covered
+        assert(a);
+
+        if (!a) {
+            // Should not be covered
+            revert();
+        }
+
+        if (a) {
+            // Should be covered
+            emit Branch(1);
+        } else {
+            // Should not be covered
+            revert();
+        }
+
+        if (a) {
+            // Should be covered
+            emit Branch(2);
+        } else if (1 + 2 == 1) {
+            // Should not be covered
+            emit Branch(3);
+
+            // There is an implicit "else" here that should not be covered
+        }
+
+        if (a) {
+            // Should be covered
+            emit Branch(2);
+        } else if (1 + 2 == 1) {
+            // Should not be covered
+            emit Branch(3);
+        } else {
+            // Should not be covered
+            emit Branch(4);
+        }
+    }
+}
