@@ -2,26 +2,26 @@
 pragma solidity >=0.8.15;
 
 /// Expected:
-/// - Functions: 3
-/// - Branches: 3, 6 paths
-/// - Statements: 7(?)
-/// - Lines: 7
+/// - Functions: 6
+/// - Branches: 6, 14 paths(?)
+/// - Statements: 14(?)
+/// - Lines: 19
 /// - Coverage: 100%
 contract Branches {
-    event Branch(bool condition);
+    event Branch(uint256 n);
 
     function branchRequire(bool increment) external {
         // Should be treated as a branch
         require(increment);
 
-        emit Branch(increment);
+        emit Branch(2);
     }
 
     function branchAssert(bool increment) external {
         // Should be treated as a branch
         assert(increment);
 
-        emit Branch(increment);
+        emit Branch(2);
     }
 
     function branchIf(bool increment) external {
@@ -30,7 +30,33 @@ contract Branches {
             revert();
         }
 
-        emit Branch(increment);
+        emit Branch(2);
+    }
+
+    function branchIfElse(bool increment) external {
+        if (increment) {
+            emit Branch(1);
+        } else {
+            revert();
+        }
+    }
+
+    function branchIfElseIf(bool a, bool b) external {
+        if (a) {
+            emit Branch(1);
+        } else if (b) {
+            emit Branch(2);
+        }
+    }
+
+    function branchIfElseIfElse(bool a, bool b) external {
+        if (a) {
+            emit Branch(1);
+        } else if (b) {
+            emit Branch(2);
+        } else {
+            emit Branch(3);
+        }
     }
 }
 

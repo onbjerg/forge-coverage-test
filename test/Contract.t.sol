@@ -17,31 +17,42 @@ contract BranchTest is DSTest {
         fixture = new Branches();
     }
 
-    function testBranchRequireTrue() public {
+    function testBranchRequire() public {
         fixture.branchRequire(true);
-    }
-
-    function testBranchRequireFalse() public {
         cheats.expectRevert();
         fixture.branchRequire(false);
     }
 
-    function testBranchAssertTrue() public {
+    function testBranchAssert() public {
         fixture.branchAssert(true);
-    }
-
-    function testBranchAssertFalse() public {
         cheats.expectRevert(abi.encodeWithSignature("Panic(uint256)", 0x01));
         fixture.branchAssert(false);
     }
 
-    function testBranchIfTrue() public {
+    function testBranchIf() public {
         fixture.branchIf(true);
-    }
-
-    function testBranchIfFalse() public {
         cheats.expectRevert();
         fixture.branchIf(false);
+    }
+
+    function testBranchIfElse() public {
+        fixture.branchIfElse(true);
+        cheats.expectRevert();
+        fixture.branchIfElse(false);
+    }
+
+    function testBranchIfElseIf() public {
+        fixture.branchIfElseIf(true, true);
+        fixture.branchIfElseIf(false, true);
+        fixture.branchIfElseIf(true, false);
+        fixture.branchIfElseIf(false, false);
+    }
+
+    function testBranchIfElseIfElse() public {
+        fixture.branchIfElseIfElse(true, true);
+        fixture.branchIfElseIfElse(false, true);
+        fixture.branchIfElseIfElse(true, false);
+        fixture.branchIfElseIfElse(false, false);
     }
 }
 
