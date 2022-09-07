@@ -3,6 +3,7 @@ pragma solidity >=0.8.15;
 
 import "ds-test/test.sol";
 import "src/Contract.sol";
+import "src/Contract2.sol";
 
 interface Cheats {
     function expectRevert() external;
@@ -10,7 +11,7 @@ interface Cheats {
 }
 
 contract BranchTest is DSTest {
-    Cheats constant internal cheats = Cheats(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
+    Cheats internal constant cheats = Cheats(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
     Branches fixture;
 
     function setUp() external {
@@ -134,5 +135,31 @@ contract ExternalLibraryUserTest is DSTest {
 
     function testRun() external {
         fixture.run();
+    }
+}
+
+contract ImportedLibraryUserTest is DSTest {
+    Cheats internal constant cheats = Cheats(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
+    ImportedLibraryUser fixture;
+
+    function setUp() external {
+        fixture = new ImportedLibraryUser();
+    }
+
+    function testTenMinusArgPlusOne() external {
+        cheats.expectRevert("too much");
+        fixture.run();
+    }
+}
+
+contract UsingForLibraryUserTest is DSTest {
+    UsingForLibraryUser fixture;
+
+    function setUp() external {
+        fixture = new UsingForLibraryUser();
+    }
+
+    function testTenMinusArgPlusOne() external {
+        assertEq(fixture.tenMinusArgPlusOne(10), 1);
     }
 }

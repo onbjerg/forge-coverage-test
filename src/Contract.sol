@@ -194,8 +194,13 @@ contract Fuzz {
 
 library InternalLibrary {
     function addLtTen(uint256 a, uint256 b) internal {
-        // should be marked as covered (partially)
+        // should be marked as covered (fully)
         require(a + b <= 10, "too much");
+    }
+
+    function subPlusOne(uint256 a, uint256 b) internal returns (uint256) {
+        // should be marked as covered
+        return a - b + 1;
     }
 }
 
@@ -217,5 +222,15 @@ contract ExternalLibraryUser {
     function run() external {
         // should be marked as covered
         ExternalLibrary.addGtTen(10, 10);
+    }
+}
+
+contract UsingForLibraryUser {
+    using InternalLibrary for uint256;
+
+    function tenMinusArgPlusOne(uint256 b) external returns (uint256) {
+        // should be marked as covered
+        uint256 c = 10;
+        return c.subPlusOne(b);
     }
 }
