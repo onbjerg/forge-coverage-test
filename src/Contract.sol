@@ -189,24 +189,28 @@ contract Fuzz {
 
 library InternalLibrary {
     function addLtTen(uint256 a, uint256 b) internal {
+        // should be marked as covered (partially)
         require(a + b <= 10, "too much");
     }
 }
 
 library ExternalLibrary {
     function addGtTen(uint256 a, uint256 b) external {
+        // should be marked as covered (partially)
         require(a + b > 10, "too little");
     }
 }
 
 contract InternalLibraryUser {
     function run() external {
+        // should be marked as covered
         InternalLibrary.addLtTen(1, 2);
     }
 }
 
 contract ExternalLibraryUser {
     function run() external {
+        // should be marked as covered
         ExternalLibrary.addGtTen(10, 10);
     }
 }
