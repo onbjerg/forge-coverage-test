@@ -146,7 +146,7 @@ contract ImportedLibraryUserTest is DSTest {
         fixture = new ImportedLibraryUser();
     }
 
-    function testTenMinusArgPlusOne() external {
+    function testRun() external {
         cheats.expectRevert("too much");
         fixture.run();
     }
