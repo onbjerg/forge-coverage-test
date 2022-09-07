@@ -54,6 +54,10 @@ contract BranchTest is DSTest {
         fixture.branchIfElseIfElse(true, false);
         fixture.branchIfElseIfElse(false, false);
     }
+
+    function testComplexBranch() public {
+        fixture.complexBranch(false, 300);
+    }
 }
 
 contract LoopTest is DSTest {
@@ -77,5 +81,58 @@ contract PartiallyCoveredTest is DSTest {
 
     function testPartiallyCovered() external {
         fixture.allBranches(true);
+    }
+}
+
+// Note: Shouldn't break
+contract StuffThatBreaksTest is DSTest {
+    StuffThatBreaks fixture;
+
+    function setUp() external {
+        fixture = new StuffThatBreaks();
+    }
+
+    function testJustReturns() external {
+        assertEq(fixture.justReturns(), 1);
+    }
+
+    function testSomeInternalFunc() external {
+        fixture.someInternalFunc(true);
+    }
+}
+
+contract FuzzTest is DSTest {
+    Fuzz fixture;
+
+    function setUp() external {
+        fixture = new Fuzz();
+    }
+
+    function testFuzz(bool a) external {
+        assert(fixture.eq(a, a));
+    }
+}
+
+contract InternalLibraryUserTest is DSTest {
+    InternalLibraryUser fixture;
+
+    function setUp() external {
+        fixture = new InternalLibraryUser();
+    }
+
+    function testRun() external {
+        fixture.run();
+    }
+}
+
+contract ExternalLibraryUserTest is DSTest {
+    ExternalLibraryUser fixture;
+
+    function setUp() external {
+        fixture = new ExternalLibraryUser();
+    }
+
+    function testRun() external {
+        fixture.run();
     }
 }

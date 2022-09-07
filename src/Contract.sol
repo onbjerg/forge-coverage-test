@@ -58,6 +58,19 @@ contract Branches {
             emit Branch(3);
         }
     }
+
+    function complexBranch(bool a, uint256 b) external {
+        if (a && b < 100) {
+            // Uncovered
+            emit Branch(1);
+        } else if (a && b < 200) {
+            // Uncovered
+            emit Branch(2);
+        } else if (!a) {
+            // Covered
+            emit Branch(3);
+        }
+    }
 }
 
 /// Expected:
@@ -144,5 +157,56 @@ contract PartiallyCovered {
             // Should not be covered
             emit Branch(4);
         }
+    }
+}
+
+// Note: Shouldn't break anymore
+contract StuffThatBreaks {
+    uint256 x = 0;
+
+    function justReturns() external returns (uint256) {
+        return 1;
+    }
+
+    function isInternal(bool a, bool b) internal {
+        if (a && b) {
+            x = x + 1;
+        }
+    }
+
+    function emptyBody() external {}
+
+    function someInternalFunc(bool a) external {
+        isInternal(a, a);
+    }
+}
+
+contract Fuzz {
+    function eq(bool a, bool b) external returns (bool) {
+        return a == b;
+    }
+}
+
+library InternalLibrary {
+    function addLtTen(uint256 a, uint256 b) internal {
+        require(a + b <= 10, "too much");
+    }
+}
+
+library ExternalLibrary {
+    function addGtTen(uint256 a, uint256 b) external {
+        require(a + b > 10, "too little");
+    }
+}
+
+contract InternalLibraryUser {
+    function run() external {
+        InternalLibrary.addLtTen(1, 2);
+    }
+}
+
+contract ExternalLibraryUser {
+    function run() external {
+        ExternalLibrary.addGtTen(10, 10);
     }
 }
