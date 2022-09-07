@@ -165,24 +165,29 @@ contract StuffThatBreaks {
     uint256 x = 0;
 
     function justReturns() external returns (uint256) {
+        // should be covered
         return 1;
     }
 
     function isInternal(bool a, bool b) internal {
+        // should be covered
         if (a && b) {
             x = x + 1;
         }
     }
 
+    // should not generate coverage data
     function emptyBody() external {}
 
     function someInternalFunc(bool a) external {
+        // should be covered
         isInternal(a, a);
     }
 }
 
 contract Fuzz {
     function eq(bool a, bool b) external returns (bool) {
+        // should be run 256 times and be covered
         return a == b;
     }
 }
