@@ -3,6 +3,7 @@ pragma solidity >=0.8.15;
 
 import "ds-test/test.sol";
 import "src/Contract.sol";
+import { BranchesNew2 } from "src/Contract1.sol";
 import "src/Contract2.sol";
 
 interface Cheats {
@@ -58,6 +59,21 @@ contract BranchTest is DSTest {
 
     function testComplexBranch() public {
         fixture.complexBranch(false, 300);
+    }
+}
+
+contract BranchNew2Test is DSTest {
+    Cheats internal constant cheats = Cheats(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
+    BranchesNew2 fixture;
+
+    function setUp() external {
+        fixture = new BranchesNew2();
+    }
+
+    function testBranchNew2Require() public {
+        fixture.branchRequire(true);
+        cheats.expectRevert();
+        fixture.branchRequire(false);
     }
 }
 
